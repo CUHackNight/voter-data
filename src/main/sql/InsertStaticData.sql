@@ -1,0 +1,1 @@
+INSERT INTO election_dim(election_id, election_type, election_date, election_year) VALUES (1, 'GENERAL', '2016-11-08', 2016);
