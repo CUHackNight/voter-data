@@ -53,7 +53,7 @@ CREATE TABLE election_dim
 );
 
 
-DROP TABLE  voting_fact CASCADE ;
+DROP TABLE if exists voting_fact CASCADE ;
 CREATE TABLE voting_fact
 (
   voting_fact_id               BIGSERIAL,

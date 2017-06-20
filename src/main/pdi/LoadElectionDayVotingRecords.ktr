@@ -657,8 +657,8 @@
     </step>
 
   <step>
-    <name>Regex Evaluation</name>
-    <type>RegexEval</type>
+    <name>Calculator</name>
+    <type>Calculator</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -667,126 +667,36 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <script><![CDATA[(.*), (\w{2}),? (.*)$]]></script>    <matcher>City , State Zip Code</matcher>
-    <resultfieldname>result</resultfieldname>
-    <usevar>N</usevar>
-    <allowcapturegroups>Y</allowcapturegroups>
-    <replacefields>N</replacefields>
-    <canoneq>N</canoneq>
-    <caseinsensitive>N</caseinsensitive>
-    <comment>N</comment>
-    <dotall>N</dotall>
-    <multiline>N</multiline>
-    <unicode>N</unicode>
-    <unix>N</unix>
-    <fields>
-      <field>
-        <name>city</name>
-        <type>String</type>
-        <format/>
-        <group/>
-        <decimal/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <nullif/>
-        <ifnull/>
-        <trimtype>none</trimtype>
-        <currency/>
-      </field>
-      <field>
-        <name>state</name>
-        <type>String</type>
-        <format/>
-        <group/>
-        <decimal/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <nullif/>
-        <ifnull/>
-        <trimtype>none</trimtype>
-        <currency/>
-      </field>
-      <field>
-        <name>zip</name>
-        <type>String</type>
-        <format/>
-        <group/>
-        <decimal/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <nullif/>
-        <ifnull/>
-        <trimtype>none</trimtype>
-        <currency/>
-      </field>
-    </fields>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>352</xloc>
-      <yloc>96</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Write&#x2f;Update Household</name>
-    <type>CombinationLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-      <schema/>
-      <table>household_dim</table>
-      <connection>CU-Hack</connection>
-      <commit>1</commit>
-      <cache_size>9999</cache_size>
-      <replace>N</replace>
-      <preloadCache>N</preloadCache>
-      <crc>Y</crc>
-      <crcfield>hashcode</crcfield>
-      <fields>
-        <key>
-          <name>address line 1</name>
-          <lookup>addressline1</lookup>
-        </key>
-        <key>
-          <name>address line 2</name>
-          <lookup>addressline2</lookup>
-        </key>
-        <key>
-          <name>City , State Zip Code</name>
-          <lookup>raw_city_state_zip</lookup>
-        </key>
-        <key>
-          <name>city</name>
-          <lookup>city</lookup>
-        </key>
-        <key>
-          <name>state</name>
-          <lookup>state_code</lookup>
-        </key>
-        <key>
-          <name>zip</name>
-          <lookup>zip</lookup>
-        </key>
-        <return>
-          <name>household_id</name>
-          <creation_method>autoinc</creation_method>
-          <use_autoinc>Y</use_autoinc>
-        </return>
-      </fields>
-      <sequence/>
-      <last_update_field/>
+    <calculation>
+      <field_name>registratonYear</field_name>
+      <calc_type>YEAR_OF_DATE</calc_type>
+      <field_a>RegDate</field_a>
+      <field_b/>
+      <field_c/>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>ageRegistered</field_name>
+      <calc_type>SUBTRACT</calc_type>
+      <field_a>registratonYear</field_a>
+      <field_b>BirthYear</field_b>
+      <field_c/>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
     <cluster_schema/>
     <remotesteps>
       <input>
@@ -796,7 +706,92 @@
     </remotesteps>
     <GUI>
       <xloc>544</xloc>
-      <yloc>112</yloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Calculator 2</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <calculation>
+      <field_name>daysPriorToElection</field_name>
+      <calc_type>CONSTANT</calc_type>
+      <field_a>0</field_a>
+      <field_b/>
+      <field_c/>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>ageAtElection</field_name>
+      <calc_type>SUBTRACT</calc_type>
+      <field_a>election_year</field_a>
+      <field_b>BirthYear</field_b>
+      <field_c/>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>yearsRegisteredAtElection</field_name>
+      <calc_type>SUBTRACT</calc_type>
+      <field_a>election_year</field_a>
+      <field_b>registratonYear</field_b>
+      <field_c/>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>ballotType</field_name>
+      <calc_type>CONSTANT</calc_type>
+      <field_a>Election Day</field_a>
+      <field_b/>
+      <field_c/>
+      <value_type>String</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>880</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
@@ -848,143 +843,6 @@
     <GUI>
       <xloc>208</xloc>
       <yloc>96</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Lookup&#x2f;Update Voter</name>
-    <type>DimensionLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-      <schema/>
-      <table>voter_dim</table>
-      <connection>CU-Hack</connection>
-      <commit>1</commit>
-      <update>Y</update>
-      <fields>
-        <key>
-          <name>Voter ID</name>
-          <lookup>county_voter_id</lookup>
-        </key>
-        <date>
-          <name>reportDate</name>
-          <from>date_from</from>
-          <to>date_to</to>
-        </date>
-        <field>
-          <name>BirthYear</name>
-          <lookup>birth_year</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>Gender</name>
-          <lookup>gender</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>RegDate</name>
-          <lookup>registration_date</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>registratonYear</name>
-          <lookup>registration_year</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>ageRegistered</name>
-          <lookup>age_registered</lookup>
-          <update>Insert</update>
-        </field>
-        <return>
-          <name>voter_id</name>
-          <rename/>
-          <creation_method>autoinc</creation_method>
-          <use_autoinc>Y</use_autoinc>
-          <version>version</version>
-        </return>
-      </fields>
-      <sequence/>
-      <min_year>1900</min_year>
-      <max_year>2199</max_year>
-      <cache_size>5000</cache_size>
-      <preload_cache>N</preload_cache>
-      <use_start_date_alternative>N</use_start_date_alternative>
-      <start_date_alternative>none</start_date_alternative>
-      <start_date_field_name/>
-      <useBatch>N</useBatch>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>544</xloc>
-      <yloc>336</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Calculator</name>
-    <type>Calculator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <calculation>
-      <field_name>registratonYear</field_name>
-      <calc_type>YEAR_OF_DATE</calc_type>
-      <field_a>RegDate</field_a>
-      <field_b/>
-      <field_c/>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask/>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
-    <calculation>
-      <field_name>ageRegistered</field_name>
-      <calc_type>SUBTRACT</calc_type>
-      <field_a>registratonYear</field_a>
-      <field_b>BirthYear</field_b>
-      <field_c/>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask/>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>544</xloc>
-      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
@@ -1092,8 +950,8 @@
     </step>
 
   <step>
-    <name>Calculator 2</name>
-    <type>Calculator</type>
+    <name>Lookup&#x2f;Update Voter</name>
+    <type>DimensionLookup</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1102,66 +960,63 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <calculation>
-      <field_name>daysPriorToElection</field_name>
-      <calc_type>CONSTANT</calc_type>
-      <field_a>0</field_a>
-      <field_b/>
-      <field_c/>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask/>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
-    <calculation>
-      <field_name>ageAtElection</field_name>
-      <calc_type>SUBTRACT</calc_type>
-      <field_a>election_year</field_a>
-      <field_b>BirthYear</field_b>
-      <field_c/>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask/>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
-    <calculation>
-      <field_name>yearsRegisteredAtElection</field_name>
-      <calc_type>SUBTRACT</calc_type>
-      <field_a>election_year</field_a>
-      <field_b>registratonYear</field_b>
-      <field_c/>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask/>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
-    <calculation>
-      <field_name>ballotType</field_name>
-      <calc_type>CONSTANT</calc_type>
-      <field_a>Election Day</field_a>
-      <field_b/>
-      <field_c/>
-      <value_type>String</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask/>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
+      <schema/>
+      <table>voter_dim</table>
+      <connection>CU-Hack</connection>
+      <commit>1</commit>
+      <update>Y</update>
+      <fields>
+        <key>
+          <name>Voter ID</name>
+          <lookup>county_voter_id</lookup>
+        </key>
+        <date>
+          <name>reportDate</name>
+          <from>date_from</from>
+          <to>date_to</to>
+        </date>
+        <field>
+          <name>BirthYear</name>
+          <lookup>birth_year</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>Gender</name>
+          <lookup>gender</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>RegDate</name>
+          <lookup>registration_date</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>registratonYear</name>
+          <lookup>registration_year</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>ageRegistered</name>
+          <lookup>age_registered</lookup>
+          <update>Insert</update>
+        </field>
+        <return>
+          <name>voter_id</name>
+          <rename/>
+          <creation_method>autoinc</creation_method>
+          <use_autoinc>Y</use_autoinc>
+          <version>version</version>
+        </return>
+      </fields>
+      <sequence/>
+      <min_year>1900</min_year>
+      <max_year>2199</max_year>
+      <cache_size>5000</cache_size>
+      <preload_cache>N</preload_cache>
+      <use_start_date_alternative>N</use_start_date_alternative>
+      <start_date_alternative>none</start_date_alternative>
+      <start_date_field_name/>
+      <useBatch>N</useBatch>
     <cluster_schema/>
     <remotesteps>
       <input>
@@ -1170,8 +1025,86 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>880</xloc>
-      <yloc>432</yloc>
+      <xloc>544</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Regex Evaluation</name>
+    <type>RegexEval</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <script><![CDATA[(.*), (\w{2}),? (.*)$]]></script>    <matcher>City , State Zip Code</matcher>
+    <resultfieldname>result</resultfieldname>
+    <usevar>N</usevar>
+    <allowcapturegroups>Y</allowcapturegroups>
+    <replacefields>N</replacefields>
+    <canoneq>N</canoneq>
+    <caseinsensitive>N</caseinsensitive>
+    <comment>N</comment>
+    <dotall>N</dotall>
+    <multiline>N</multiline>
+    <unicode>N</unicode>
+    <unix>N</unix>
+    <fields>
+      <field>
+        <name>city</name>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+        <currency/>
+      </field>
+      <field>
+        <name>state</name>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+        <currency/>
+      </field>
+      <field>
+        <name>zip</name>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+        <currency/>
+      </field>
+    </fields>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>352</xloc>
+      <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
@@ -1256,6 +1189,73 @@
     <GUI>
       <xloc>880</xloc>
       <yloc>528</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Write&#x2f;Update Household</name>
+    <type>CombinationLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+      <schema/>
+      <table>household_dim</table>
+      <connection>CU-Hack</connection>
+      <commit>1</commit>
+      <cache_size>9999</cache_size>
+      <replace>N</replace>
+      <preloadCache>N</preloadCache>
+      <crc>Y</crc>
+      <crcfield>hashcode</crcfield>
+      <fields>
+        <key>
+          <name>address line 1</name>
+          <lookup>addressline1</lookup>
+        </key>
+        <key>
+          <name>address line 2</name>
+          <lookup>addressline2</lookup>
+        </key>
+        <key>
+          <name>City , State Zip Code</name>
+          <lookup>raw_city_state_zip</lookup>
+        </key>
+        <key>
+          <name>city</name>
+          <lookup>city</lookup>
+        </key>
+        <key>
+          <name>state</name>
+          <lookup>state_code</lookup>
+        </key>
+        <key>
+          <name>zip</name>
+          <lookup>zip</lookup>
+        </key>
+        <return>
+          <name>household_id</name>
+          <creation_method>autoinc</creation_method>
+          <use_autoinc>Y</use_autoinc>
+        </return>
+      </fields>
+      <sequence/>
+      <last_update_field/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>544</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
